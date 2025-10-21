@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Tracker - Login</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2d1b4f, #831c98, #4f1c65, #201040);
+      background-attachment: fixed;
+      font-family: 'Poppins', sans-serif;
+      color: #e2e8f0;
+    }
+
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 34px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+      animation: glow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #7c3aed; }
+      to { text-shadow: 0 0 20px #a78bfa; }
+    }
+
+    /* === Glass Box === */
+    .glass-box {
+      width: 340px;
+      padding: 40px 30px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      color: #f1f5f9;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass-box:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+    }
+
+    .glass-box h2 {
+      margin-bottom: 25px;
+      color: white;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    /* === Input Fields === */
+    .glass-box input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px -15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
+      font-size: 15px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass-box input::placeholder {
+      color: white;
+      opacity: 0.8;
+    }
+
+    .glass-box input:focus {
+      border-color: #7c3aed;
+      box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+      transform: scale(1.001);
+    }
+
+    /* === Remember & Forgot === */
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-top: 5px;
+    }
+
+    .options a {
+      color: #a78bfa;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .options a:hover { color: #c084fc; }
+
+    /* === Button === */
+    .glass-box button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+    }
+
+    .glass-box button:hover {
+      background: linear-gradient(90deg, #3b82f6, #9333ea);
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.7);
+    }
+
+    /* === Social Login === */
+    .social-login {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-login img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      filter: brightness(0.9);
+    }
+
+    .social-login img:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+
+    /* === Signup Text === */
+    .signup-text {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+
+    .signup-text a {
+      color: #a78bfa;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .signup-text a:hover {
+      color: #c084fc;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 400px) {
+      .glass-box { width: 90%; padding: 30px 20px; }
+      .logo { font-size: 28px; }
+    }
+  </style>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script>
+    const speed = 4.0;
+    const scale = 1.0;
+    const colorHex = "#7c3aed"; 
+
+    function hexToNormalizedRGB(hex) {
+      hex = hex.replace('#', '');
+      return [
+        parseInt(hex.slice(0, 2), 16) / 255,
+        parseInt(hex.slice(2, 4), 16) / 255,
+        parseInt(hex.slice(4, 6), 16) / 255
+      ];
+    }
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+    camera.position.z = 1;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const vertexShader = `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `;
+
+    const fragmentShader = `
+      varying vec2 vUv;
+      uniform float uTime;
+      uniform vec3  uColor;
+      uniform float uSpeed;
+      uniform float uScale;
+
+      void main() {
+        vec2 uv = vUv * uScale;
+        float t = uTime * uSpeed;
+        float wave = sin(uv.x * 6.0 + t) * 0.1 + cos(uv.y * 4.0 - t) * 0.1;
+        vec3 color = uColor + vec3(wave * 0.5, wave * 0.2, wave);
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `;
+
+    const uniforms = {
+      uTime: { value: 0.0 },
+      uSpeed: { value: speed },
+      uScale: { value: scale },
+      uColor: { value: new THREE.Color(...hexToNormalizedRGB(colorHex)) }
+    };
+
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const material = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader,
+      fragmentShader
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      uniforms.uTime.value += clock.getDelta() * 0.5;
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+
+  <div class="container">
+    <div class="logo">Student Tracker</div>
+
+    <div class="glass-box">
+      <h2>Welcome Back</h2>
+      <form action="/login" method="POST">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <div class="options">
+          <label><input type="checkbox" style="accent-color:#7c3aed"> Remember me</label>
+          <a href="#">Forgot Password?</a>
+        </div>
+        <button type="submit">Login</button>
+      </form>
+
+      <div class="social-login">
+        <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png" alt="Google" title="Login with Google">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" title="Login with Facebook">
+        <img src="https://cdn-icons-png.flaticon.com/512/2504/2504911.png" alt="GitHub" title="Login with GitHub">
+      </div>
+
+      <p class="signup-text">
+        Don’t have an account? <a href="#">Sign up</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

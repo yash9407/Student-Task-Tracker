@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive</title>
+
+    <style>
+
+        body, html { margin:0; padding:0; width:100%; height:100%; overflow:auto; font-family:'Montserrat', sans-serif; background: linear-gradient(135deg, #2d1b4f, #831c98, #4f1c65, #201040); color:#e2e8f0; }
+    header { position: fixed; top:0; left:0; width:100%; display:flex; align-items:center; justify-content:flex-end; padding:15px 40px; z-index:50; background: rgba(25, 10, 45, 0.6); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .home-link, .contact-link { color:#f1f5f9; text-decoration:none; font-weight:600; font-size:17px; padding:8px 15px; border-radius:20px; background: rgba(60, 45, 90,0.5); transition: all 0.3s ease; }
+    .home-link:hover, .contact-link:hover { background: linear-gradient(90deg,#b980ff,#a855f7); box-shadow:0 0 12px rgba(168,85,247,0.5); color:#fff; }
+    .contact-link { margin-right:70px; } .home-link { margin-right:10px; }
+
+    </style>
+</head>
+<body>
+    <header>
+
+        <a href="{{ url_for('dashboard') }}" class="home-link">Home</a>
+        <a href="{{ url_for('contact') }}" class="contact-link">Contact</a>
+
+    </header>
+</body>
+</html>
